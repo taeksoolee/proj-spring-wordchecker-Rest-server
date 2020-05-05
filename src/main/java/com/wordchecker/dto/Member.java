@@ -22,7 +22,7 @@ public class Member {
 	private String birthday;
 	private String lastLogin;
 	private String joinDate;
-	private String state;
+	private int state;
 	
 	public int getNo() {
 		return no;
@@ -66,10 +66,10 @@ public class Member {
 	public void setJoinDate(String joinDate) {
 		this.joinDate = joinDate;
 	}
-	public String getState() {
+	public int getState() {
 		return state;
 	}
-	public void setState(String state) {
+	public void setState(int state) {
 		this.state = state;
 	}
 	

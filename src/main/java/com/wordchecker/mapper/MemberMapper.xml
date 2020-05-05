@@ -1,7 +1,62 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.wordchecker.mapper.MemberMapper">
-	<select id="selectMember" resultType="Member">
-		select * from member
+<!-- 사용 안함 
+	<select id="selectMemberNo" resultType="Member">
+		select * from member where no=${no}
 	</select>
+	
+	<select id="selectMemberEmail" resultType="Member">
+		select * form member where email=#{email}
+	</select>
+ -->	
+	<select id="selectMemberMember" resultType="Member">
+		select * from member
+		<trim prefix="where" suffixOverrides="or|and">
+		state!=#{state} and
+		<if test="no != 0">
+			no=#{no} and
+		</if>
+		<if test="email != null">
+			email=#{email} and
+		</if>
+		<if test="nickname != null">
+			nickname=#{nickname} and
+		</if>
+		<if test="birthday != null">
+			birthday=#{birthday} and
+		</if>
+		</trim>
+	</select>
+	
+	<insert id="insertMember">
+		insert into  member(email, password, nickname, birthday, join_date, state) values(#{email},#{password},#{nickname},#{birthday}, now(), 1)
+	</insert>
+	
+	<update id="updateMember">
+		update member
+			<set>
+				<if test="email != null">
+					email=#{email}, 
+				</if>
+				<if test="password != null">
+					password=#{password}, 
+				</if>
+				<if test="nickname != null">
+				 	nickname=#{nickname}, 
+				</if>
+				<if test="birthday != null">
+					birthday=#{birthday}, 
+				</if>
+			</set> 
+		where no=#{no}
+	</update>
+	
+	<update id="updateMemberState">
+		update member set state=#{state} where no=#{no}
+	</update>
+	
+	<update id="updateMemberLastLogin">
+		update member set last_login=now() where no=#{no}
+	</update>
 </mapper>

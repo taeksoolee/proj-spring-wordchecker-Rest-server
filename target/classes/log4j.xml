@@ -33,7 +33,9 @@
 	</logger>
 	
 	<!-- sql 로그 세팅 -->	
-	<logger name="jdbc.sqlonly" level="info" />
+	<logger name="jdbc.sqlonly">
+		<level value="info"/>
+	</logger>
 	
 	<logger name="jdbc.sqltiming">
 		<level value="info"/>

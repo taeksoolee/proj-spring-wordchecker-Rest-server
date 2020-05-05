@@ -25,7 +25,7 @@ public class TestClass {
 	
 	@Test
 	public void testMain() {
-		System.out.println(memberDao.selectMember().toString());
+		
 	}
 	
 }
