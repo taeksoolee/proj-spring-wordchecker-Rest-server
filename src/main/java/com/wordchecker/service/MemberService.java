@@ -1,19 +1,23 @@
 package com.wordchecker.service;
 
+import java.io.UnsupportedEncodingException;
+
+import javax.mail.MessagingException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import com.wordchecker.dto.Member;
-import com.wordchecker.exception.DuplicateEntityException;
+import com.wordchecker.exception.DuplicateMemberException;
 import com.wordchecker.exception.InvalidException;
 import com.wordchecker.exception.MemberNotFoundException;
 import com.wordchecker.exception.WrongAccessException;
+import com.wordchecker.exception.XssException;
 
 public interface MemberService {
-	//Member getMemberNo(int no);
-	//Member getMemberEmail(String email);
 	Member getMemberMember(Member member);
-	Member getLogin(Member member) throws WrongAccessException, MemberNotFoundException;
-	int modifyMemberSearchPassword(Member member) throws MemberNotFoundException;
-	int addMember(Member member) throws DuplicateEntityException, InvalidException;
-	int modifyMember(Member member) throws InvalidException, WrongAccessException, MemberNotFoundException;
+	Member getLogin(Member member, HttpServletResponse response) throws WrongAccessException, MemberNotFoundException, UnsupportedEncodingException;
+	int modifyMemberSearchPassword(Member member) throws MemberNotFoundException, MessagingException;
+	int addMember(Member member) throws DuplicateMemberException, InvalidException, XssException;
+	int modifyMember(Member member) throws InvalidException, WrongAccessException, MemberNotFoundException, XssException;
 	int modifyMemberState(Member member) throws WrongAccessException;
-	//int modifyMemberLastLogin(int no);
 }

@@ -2,22 +2,22 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.wordchecker.mapper.WordMapper">
 	<select id="selectWord" resultType="Word">
-		select i.* from word join(select no from word where member_no=#{memberNo} limit #{start}, #{length}) i on word.no=i.no
+		select word.* from word join(select no from word where member_no=#{memberNo} limit #{start}, #{length}) i on word.no=i.no order by word.no desc
 	</select>
 	<select id="selectWrodNo" resultType="Word">
 		select * from word where no=#{no}
 	</select>
 	<insert id="insertWord">
-		insert into word(speling, meaning, member_no, write_date, state) values(#{speling} #{meaning}, {memberNo}, now(), 1)
+		insert into word(speling, meaning, member_no, write_date, state) values(#{speling}, #{meaning}, #{memberNo}, now(), 1)
 	</insert>
 	<update id="updateWord">
 		update word 
 		<set>
 			<if test="speling != null">
-				peling=#{speling}
+				speling=#{speling}, 
 			</if>
 			<if test="meaning != null">
-				meaning=#{meaning}
+				meaning=#{meaning}, 
 			</if>
 			write_date=now()
 		</set>

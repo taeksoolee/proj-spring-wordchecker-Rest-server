@@ -4,7 +4,7 @@ package com.wordchecker.exception;
 public class MemberNotFoundException extends Exception{
 	private static final long serialVersionUID = 1L;
 	
-	public MemberNotFoundException(String message) {
-		super(message);
+	public MemberNotFoundException() {
+		super("요청하신 회원 정보를 찾을 수 없습니다.");
 	}
 }

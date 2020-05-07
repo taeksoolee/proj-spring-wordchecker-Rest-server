@@ -2,16 +2,22 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans https://www.springframework.org/schema/beans/spring-beans.xsd">
+	
 	<bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
-		<property name="location" value="/WEB-INF/spring/config.properties"/>
+		<property name="locations">
+			<list>
+				<value>/WEB-INF/conf/jdbc.properties</value>
+				<value>/WEB-INF/conf/mail.properties</value>
+			</list>
+		</property>
 	</bean>
-		
+	
 	<!-- SQL 관련 설정 -->
 	<bean class="org.springframework.jdbc.datasource.DriverManagerDataSource" id="dataSource">
-		<property name="driverClassName" value="${driver}" />
-		<property name="url" value="${url}" />
-		<property name="username" value="${username}" />
-		<property name="password" value="${password}" />
+		<property name="driverClassName" value="${jdbc.driver}" />
+		<property name="url" value="${jdbc.url}" />
+		<property name="username" value="${jdbc.username}" />
+		<property name="password" value="${jdbc.password}" />
 	</bean>
 	
 	<bean class="net.sf.log4jdbc.sql.jdbcapi.DriverSpy"></bean>
@@ -33,6 +39,20 @@
 	
 	<bean class="org.mybatis.spring.SqlSessionTemplate" id="sqlSession" destroy-method="clearCache">
 		<constructor-arg ref="sqlSessionFactoryBean"/>
-	</bean>	
+	</bean>
 	
+	<!-- mail세팅 -->
+	<bean class="org.springframework.mail.javamail.JavaMailSenderImpl" id="mailSender">
+		<property name="host" value="${mail.host}"/>
+		<property name="port" value="${mail.port}"/>
+		<property name="username" value="${mail.username}"/>
+		<property name="password" value="${mail.password}"/>
+		<property name="javaMailProperties">
+			<props>
+				<prop key="mail.smtp.ssl.trust">${mail.ssl.trust}</prop>
+				<prop key="mail.smtp.starttls.enable">${mail.starttls.enable}</prop>
+				<prop key="mail.smtp.auth">${mail.auth}</prop>
+			</props>
+		</property>
+	</bean>
 </beans>

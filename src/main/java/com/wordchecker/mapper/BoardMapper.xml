@@ -4,7 +4,7 @@
 	<resultMap type="BoardMember" id="boardMember">
 		<association property="board" javaType="Board">
 			<id column="b_no" property="no"/>
-			<result column="title" property="speling" />
+			<result column="title" property="title" />
 			<result column="content" property="content" />
 			<result column="member_no" property="memberNo" />
 			<result column="wrtie_date" property="writeDate" />
@@ -21,6 +21,7 @@
 			<result column="m_state" property="state" />
 		</association>
 	</resultMap>
+	
 	<select id="selectBoardMember" resultMap="boardMember">
 		select b.no b_no, b.title, b.content, b.member_no, b.write_date, b.state b_state, 
 		m.no m_no, m.email, m.password, m.nickname, m.birthday, m.last_login, m.join_date, m.state m_state 
@@ -32,19 +33,21 @@
 		<if test="content != null">
 			content like concat('%',#{content},'%') and
 		</if>
-		<if test="writeDate != null">
-			write_date like concat('%',#{wirterDate},'%') and
+		<if test="startDate != '' and endDate != ''">
+			(substr(write_date,1,10) between #{startDate} and #{endDate}) and
 		</if>
 		</trim> 
 		limit #{start}, #{length}) i on b.no=i.no left join (select * from member
 		<if test="nickname != null">
 			where nickname like concat('%',#{nickname},'%')
 		</if>
-		) m on b.member_no=m.no
+		) m on b.member_no=m.no order by b.no desc
 	</select>
+	
 	<select id="selectBoardNo" resultType="Board">
 		select * from board where no=#{no}
 	</select>
+	
 	<insert id="insertBoard">
 		insert into board(title, content, member_no, write_date, state) values(#{title}, #{content}, #{memberNo}, now(), 1)
 	</insert>
@@ -61,6 +64,7 @@
 		</set>
 		 where no=#{no}
 	</update>
+	
 	<update id="updateBoardState">
 		update board set state=#{state} wherno=#{no}
 	</update>

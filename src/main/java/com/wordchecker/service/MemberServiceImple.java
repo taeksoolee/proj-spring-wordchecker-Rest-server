@@ -1,6 +1,11 @@
 package com.wordchecker.service;
 
+import java.io.UnsupportedEncodingException;
 import java.util.UUID;
+
+import javax.mail.MessagingException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -8,26 +13,24 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.wordchecker.dao.MemberDao;
 import com.wordchecker.dto.Member;
-import com.wordchecker.exception.DuplicateEntityException;
+import com.wordchecker.exception.DuplicateMemberException;
 import com.wordchecker.exception.InvalidException;
 import com.wordchecker.exception.MemberNotFoundException;
 import com.wordchecker.exception.WrongAccessException;
+import com.wordchecker.exception.XssException;
+import com.wordchecker.util.Encryption;
+import com.wordchecker.util.JwtManager;
+import com.wordchecker.util.MailManager;
+import com.wordchecker.util.Validation;
 
 @Service
 public class MemberServiceImple implements MemberService{
 	@Autowired
 	private MemberDao memberDao;
-	/* 
-	@Override
-	public Member getMemberNo(int no) {
-		return memberDao.selectMemberNo(no);
-	}
-
-	@Override
-	public Member getMemberEmail(String email) {
-		return memberDao.selectMemberEmail(email);
-	}
-	*/
+	@Autowired
+	private Validation validation;
+	@Autowired
+	private MailManager mailManger;
 
 	@Override
 	public Member getMemberMember(Member member) {
@@ -35,63 +38,59 @@ public class MemberServiceImple implements MemberService{
 	}
 	
 	@Override
-	public Member getLogin(Member member) throws WrongAccessException, MemberNotFoundException {
-		if(!(member.getEmail() != null && member.getPassword() != null)) throw new WrongAccessException("잘못된 접근입니다.");
+	@Transactional
+	public Member getLogin(Member member, HttpServletResponse response) throws WrongAccessException, MemberNotFoundException, UnsupportedEncodingException {
+		if(!(member.getEmail() != null && member.getPassword() != null)) throw new WrongAccessException();
 		
-		Member loginMember = memberDao.selectMemberMember(member);
-		if(loginMember == null) throw new MemberNotFoundException("일치하는 회원정보가 존재하지 않습니다.");
+		Member loginMember = memberDao.selectMemberMember(Encryption.encrptMemberPassword(member));
+		if(loginMember == null) throw new MemberNotFoundException();
+		memberDao.updateMemberLastLogin(loginMember.getNo());
 		
-		//jwt 발행
-		//****************************************/
-				
-		memberDao.updateMemberLastLogin(member.getNo());
-		
-		// 발행 jwt 반환
-		return new Member();
+		return loginMember;
 	}
 	
 	@Override
 	@Transactional
-	public int modifyMemberSearchPassword(Member member) throws MemberNotFoundException{
+	public int modifyMemberSearchPassword(Member member) throws MemberNotFoundException, MessagingException{
 		Member selectMember = memberDao.selectMemberMember(member);
-		if(selectMember == null) throw new MemberNotFoundException("회원이 발견되지 않았습니다.");
+		if(selectMember == null) throw new MemberNotFoundException();
 		
-		//랜덤비밀번호 생성
-		String tempPassword = UUID.randomUUID().toString().substring(0, 8);
-		//메일발송
-		//***********************/
+		String randomPassword = UUID.randomUUID().toString().replace("-", "").substring(0, 5);
+		
+		mailManger.sendHtmlEmail(member.getEmail(), "[word-checker]비밀번호 안내", mailManger.decorateHtmlPassword(randomPassword));
 		
 		Member updateMember = new Member();
 		updateMember.setNo(selectMember.getNo());
-		updateMember.setPassword(tempPassword);
+		updateMember.setPassword(randomPassword);
 		
+		updateMember = Encryption.encrptMemberPassword(updateMember);
 		return memberDao.updateMember(updateMember);
 	}
 	
 	@Override
 	@Transactional
-	public int addMember(Member member) throws DuplicateEntityException, InvalidException {
-		if(!validateMember(member)) throw new InvalidException("");
+	public int addMember(Member member) throws DuplicateMemberException, InvalidException, XssException {
+		validation.validateMember(member);
 		
 		//중복회원 확인
 		Member tempMember = new Member();
-		tempMember.setNo(member.getNo());
-		if(memberDao.selectMemberMember(tempMember) != null) throw new DuplicateEntityException("중복된 회원이 존재 합니다.");
+		tempMember.setEmail(member.getEmail());
+		if(memberDao.selectMemberMember(tempMember) != null) throw new DuplicateMemberException();
 		
+		member = Encryption.encrptMemberPassword(member);
 		return memberDao.insertMember(member);
 	}
 
 	@Override
 	@Transactional
-	public int modifyMember(Member member) throws InvalidException, WrongAccessException, MemberNotFoundException {
-		if(member.getNo() == 0) throw new WrongAccessException("잘못된 접근 입니다.");
+	public int modifyMember(Member member) throws InvalidException, WrongAccessException, MemberNotFoundException, XssException {
+		if(member.getNo() == 0) throw new WrongAccessException();
 		
-		//회원 존재유무 확인
-		Member tempMember = new Member();
-		tempMember.setNo(member.getNo());
-		if(memberDao.selectMemberMember(tempMember) == null) throw new MemberNotFoundException("요청하신 회원 정보를 찾을 수 없습니다.");
+		validation.validateMember(member);
 		
-		if(!validateMember(member)) throw new InvalidException("");
+		if(!(member.getPassword() == null && member.getPassword().equals(""))) {
+			Encryption.encrptMemberPassword(member);
+		}
 		
 		return memberDao.updateMember(member);
 	}
@@ -99,28 +98,8 @@ public class MemberServiceImple implements MemberService{
 
 	@Override
 	public int modifyMemberState(Member member) throws WrongAccessException {
-		if(member.getNo() == 0) throw new WrongAccessException("잘못된 접근 입니다.");
+		if(member.getNo() == 0) throw new WrongAccessException();
 		
 		return memberDao.updateMemberState(member);
 	}
-
-/* 사용하지 않음
-	@Override
-	public int modifyMemberLastLogin(int no) {
-		return memberDao.updateMemberLastLogin(no);
-	}
-*/
-	
-	private boolean validateMember(Member member)  {
-		//유효성 검사 로직
-		
-		return true;
-		
-	}
-
-	
-
-
-
-	
 }

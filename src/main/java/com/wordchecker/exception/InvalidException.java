@@ -4,7 +4,7 @@ package com.wordchecker.exception;
 public class InvalidException extends Exception{
 	private static final long serialVersionUID = 1L;
 	
-	public InvalidException(String message) {
-		super(message);
+	public InvalidException() {
+		super("요청하신 문자의 형식이 맞지 않습니다.");
 	}
 }

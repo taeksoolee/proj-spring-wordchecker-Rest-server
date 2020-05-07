@@ -4,7 +4,7 @@ package com.wordchecker.exception;
 public class WrongAccessException extends Exception{
 	private static final long serialVersionUID = 1L;
 
-	public WrongAccessException(String message) {
-		super(message);
+	public WrongAccessException() {
+		super("잘못된 접근입니다.");
 	}
 }

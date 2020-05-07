@@ -10,6 +10,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
 import com.wordchecker.dao.MemberDao;
+import com.wordchecker.util.JwtManager;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @WebAppConfiguration 
@@ -22,10 +23,11 @@ public class TestClass {
 	
 	@Autowired
 	private MemberDao memberDao;
+	@Autowired
+	private JwtManager jwtManger;
 	
 	@Test
 	public void testMain() {
-		
 	}
 	
 }
