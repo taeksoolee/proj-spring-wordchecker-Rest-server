@@ -13,6 +13,7 @@ import com.wordchecker.dao.WordDao;
 import com.wordchecker.dto.Member;
 import com.wordchecker.dto.Word;
 import com.wordchecker.dto.WordFilter;
+import com.wordchecker.dto.WordTestFilter;
 import com.wordchecker.exception.InvalidException;
 import com.wordchecker.exception.MemberNotFoundException;
 import com.wordchecker.exception.WrongAccessException;
@@ -36,6 +37,12 @@ public class WordServiceImpl implements WordService{
 		return wordDao.selectWord(filter);
 	}
 
+	@Override
+	public List<Word> getWordTest(WordTestFilter filter) throws InvalidException {
+		validation.validateWordTestFilter(filter);
+		return wordDao.selectWordTest(filter);
+	}
+	
 	@Override
 	public Word getWrodNo(int no) {
 		return wordDao.selectWrodNo(no);
@@ -81,4 +88,5 @@ public class WordServiceImpl implements WordService{
 		
 		return wordDao.updateWordState(word);
 	}
+
 }

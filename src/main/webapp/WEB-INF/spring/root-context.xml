@@ -8,7 +8,24 @@
 			<list>
 				<value>/WEB-INF/conf/jdbc.properties</value>
 				<value>/WEB-INF/conf/mail.properties</value>
+				<value>/WEB-INF/conf/jwt.properties</value>
+				<value>/WEB-INF/conf/site.properties</value>
 			</list>
+		</property>
+	</bean>
+	
+	<!-- mail세팅 -->
+	<bean class="org.springframework.mail.javamail.JavaMailSenderImpl" id="mailSender">
+		<property name="host" value="${mail.host}"/>
+		<property name="port" value="${mail.port}"/>
+		<property name="username" value="${mail.username}"/>
+		<property name="password" value="${mail.password}"/>
+		<property name="javaMailProperties">
+			<props>
+				<prop key="mail.smtp.ssl.trust">${mail.ssl.trust}</prop>
+				<prop key="mail.smtp.starttls.enable">${mail.starttls.enable}</prop>
+				<prop key="mail.smtp.auth">${mail.auth}</prop>
+			</props>
 		</property>
 	</bean>
 	
@@ -41,18 +58,6 @@
 		<constructor-arg ref="sqlSessionFactoryBean"/>
 	</bean>
 	
-	<!-- mail세팅 -->
-	<bean class="org.springframework.mail.javamail.JavaMailSenderImpl" id="mailSender">
-		<property name="host" value="${mail.host}"/>
-		<property name="port" value="${mail.port}"/>
-		<property name="username" value="${mail.username}"/>
-		<property name="password" value="${mail.password}"/>
-		<property name="javaMailProperties">
-			<props>
-				<prop key="mail.smtp.ssl.trust">${mail.ssl.trust}</prop>
-				<prop key="mail.smtp.starttls.enable">${mail.starttls.enable}</prop>
-				<prop key="mail.smtp.auth">${mail.auth}</prop>
-			</props>
-		</property>
-	</bean>
+	
+	
 </beans>

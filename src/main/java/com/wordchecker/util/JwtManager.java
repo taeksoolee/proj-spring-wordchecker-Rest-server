@@ -27,6 +27,7 @@ import io.jsonwebtoken.JwtBuilder;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.SignatureException;
 
 @Component
 @PropertySource("/WEB-INF/conf/jwt.properties")
@@ -41,9 +42,7 @@ public class JwtManager {
 	private String alg;
 	
 	@Value("${jwt.defaultExpMinute}")
-	private int defaultExpMinute;
-	
-	
+	private String defaultExpMinute;
 	
 	public String getJwt(int minite, Member member) throws UnsupportedEncodingException {
 		SignatureAlgorithm signatureAlgorithm = SignatureAlgorithm.HS256;
@@ -68,27 +67,35 @@ public class JwtManager {
 	}
 	
 	public String getJwt(Member member) throws UnsupportedEncodingException {
-		return getJwt(defaultExpMinute, member);
+		System.out.println(alg + "|" + typ + "|" + defaultExpMinute + "|" + secretKey);
+		return getJwt(Integer.parseInt(defaultExpMinute), member);
 	}
 	
 	public Claims convertJwtToClaim(String jwt) {
 		Claims claims = null;
 		try {
 			claims = Jwts.parser().setSigningKey(DatatypeConverter.parseBase64Binary(secretKey)).parseClaimsJws(jwt).getBody();
-        } catch (ExpiredJwtException exception) {
+        }catch (ExpiredJwtException exception) {
             exception.printStackTrace();
         } catch (JwtException exception) {
         	exception.printStackTrace();
         }
+        	
 		return claims;
 	}
 	
 	public int getJwtValueToRequestAttribute(HttpServletRequest request) throws MemberNotFoundException {
 		String jwt = (String) request.getAttribute("jwt");
-		int no = (Integer)convertJwtToClaim(jwt).get("no");
+		int no = convertJwtToClaim(jwt)!=null?(Integer)convertJwtToClaim(jwt).get("no"):0;
 		
 		if(no == 0) throw new MemberNotFoundException();
 			
 		return no;
+	}
+
+	@Override
+	public String toString() {
+		return "JwtManager [secretKey=" + secretKey + ", typ=" + typ + ", alg=" + alg + ", defaultExpMinute="
+				+ defaultExpMinute + "]";
 	}
 }

@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.wordchecker.dto.Board;
 import com.wordchecker.dto.BoardFilter;
@@ -23,8 +24,7 @@ import com.wordchecker.exception.MemberNotFoundException;
 import com.wordchecker.service.BoardService;
 import com.wordchecker.util.JwtManager;
 
-@Controller
-@ResponseBody
+@RestController
 public class BoardController {
 	@Autowired
 	private BoardService boardService;

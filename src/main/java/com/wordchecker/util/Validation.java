@@ -10,13 +10,13 @@ import org.springframework.stereotype.Component;
 import com.wordchecker.dto.Board;
 import com.wordchecker.dto.Member;
 import com.wordchecker.dto.Word;
+import com.wordchecker.dto.WordTestFilter;
 import com.wordchecker.exception.DevMistakeException;
 import com.wordchecker.exception.InvalidException;
 import com.wordchecker.exception.XssException;
 
 @Component
 public class Validation {
-	
 	public static final String MEMBER_EMAIL_REGEX = "";
 	public static final String MEMBER_PASSWORD_REGEX = "";
 	public static final String MEMBER_NICKNAME_REGEX = "";
@@ -25,6 +25,8 @@ public class Validation {
 	public static final String WORD_MEANING_REGEX = "";
 	public static final String BOARD_TITLE_REGEX = "";
 	public static final String BOARD_CONTENT_REGEX = "";
+	
+	public static final String DATE_REGEX = "";
 	
 	private void rejectXss(String string) throws XssException{
 		if(string.split("[<>]").length != 1) throw new XssException();
@@ -92,5 +94,15 @@ public class Validation {
 		inValid = (!inValid && Pattern.matches(BOARD_TITLE_REGEX, board.getTitle()))?true:false;
 		inValid = (!inValid && Pattern.matches(BOARD_CONTENT_REGEX, board.getContent()))?true:false;
 		if(inValid) throw new InvalidException();
+	}
+	
+	public void validateWordTestFilter(WordTestFilter filter) throws InvalidException {
+		boolean inValid = false;
+		inValid = (!inValid && Pattern.matches(DATE_REGEX, filter.getStartDate()))?true:false;
+		inValid = (!inValid && Pattern.matches(DATE_REGEX, filter.getEndDate()))?true:false;
+		inValid = (!inValid && Pattern.matches(WORD_SPELING_REGEX, filter.getSpeling()))?true:false;
+		inValid = (!inValid && Pattern.matches(WORD_MEANING_REGEX, filter.getMeaning()))?true:false;
+		if(inValid) throw new InvalidException();
+		
 	}
 }

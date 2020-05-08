@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 
 import com.wordchecker.dto.Word;
 import com.wordchecker.dto.WordFilter;
+import com.wordchecker.dto.WordTestFilter;
 import com.wordchecker.mapper.WordMapper;
 
 @Repository
@@ -18,6 +19,11 @@ public class WordDaoImpl implements WordDao{
 	@Override
 	public List<Word> selectWord(WordFilter filter) {
 		return sqlSession.getMapper(WordMapper.class).selectWord(filter);
+	}
+	
+	@Override
+	public List<Word> selectWordTest(WordTestFilter filter) {
+		return sqlSession.getMapper(WordMapper.class).selectWordTest(filter);
 	}
 
 	@Override

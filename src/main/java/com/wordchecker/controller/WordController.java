@@ -14,10 +14,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.wordchecker.dto.Member;
 import com.wordchecker.dto.Word;
 import com.wordchecker.dto.WordFilter;
+import com.wordchecker.dto.WordTestFilter;
 import com.wordchecker.exception.InvalidException;
 import com.wordchecker.exception.MemberNotFoundException;
 import com.wordchecker.exception.WrongAccessException;
@@ -26,9 +28,9 @@ import com.wordchecker.service.MemberService;
 import com.wordchecker.service.WordService;
 import com.wordchecker.util.JwtManager;
 import com.wordchecker.util.Validation;
+import com.wordchecker.util.WordOrderType;
 
-@Controller
-@ResponseBody
+@RestController
 public class WordController {
 	@Autowired
 	private WordService wordService;
@@ -38,6 +40,35 @@ public class WordController {
 	private void setMemberNofromJwt(Word word, HttpServletRequest request) throws MemberNotFoundException {
 		int memberNo = jwtManager.getJwtValueToRequestAttribute(request);
 		word.setMemberNo(memberNo);
+	}
+	
+	@RequestMapping(value="/auth/word/test/{orderType}", method=RequestMethod.POST)
+	public List<Word> getWordTest(@ModelAttribute WordTestFilter filter, @PathVariable int orderType, HttpServletRequest request) throws WrongAccessException, MemberNotFoundException, InvalidException{
+		int memberNo = jwtManager.getJwtValueToRequestAttribute(request);
+		filter.setMemberNo(memberNo);
+		
+		switch (orderType) {
+		case 1:
+			filter.setWordOrderType(WordOrderType.WRITE_DATE_DESC);
+			break;
+		case 2:
+			filter.setWordOrderType(WordOrderType.WRITE_DATE_ASC);
+			break;
+		case 3:
+			filter.setWordOrderType(WordOrderType.SPELING_DESC);
+			break;
+		case 4:
+			filter.setWordOrderType(WordOrderType.SPELING_ASC);
+			break;
+		case 5:
+			filter.setWordOrderType(WordOrderType.MEANING_DESC);
+			break;
+		case 6:
+			filter.setWordOrderType(WordOrderType.MEANING_ASC);
+			break;
+		}
+		
+		return wordService.getWordTest(filter);
 	}
 	
 	@RequestMapping(value="/auth/word", method=RequestMethod.GET)
@@ -53,7 +84,6 @@ public class WordController {
 		setMemberNofromJwt(word, request);
 		if(word.getMeaning() == null && word.getSpeling() == null) throw new WrongAccessException();
 		int resultRow = wordService.addWord(word);
-		
 		Map<String, Object> result = new HashMap<String, Object>();
 		result.put("result", resultRow);
 		result.put("message", "단어 등록이 완료되었습니다.");

@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.wordchecker.dto.Member;
 import com.wordchecker.exception.DuplicateMemberException;
@@ -29,8 +30,7 @@ import com.wordchecker.service.MemberService;
 import com.wordchecker.util.JwtManager;
 import com.wordchecker.util.MailManager;
 
-@Controller
-@ResponseBody
+@RestController
 public class MemberController {
 	private Logger logger = LoggerFactory.getLogger(MemberController.class);
 	

@@ -4,30 +4,41 @@ import javax.mail.MessagingException;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
+import org.springframework.mail.MailSendException;
+import org.springframework.mail.MailSender;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.stereotype.Component;
 
 @Component
 @PropertySource("/WEB-INF/conf/site.properties")
 public class MailManager {
+	private Logger logger = LoggerFactory.getLogger(MailManager.class);
 	@Autowired
-	@Qualifier("mailSender")
 	private JavaMailSender mailSender;
+	
+	@Value("${mail.username}")
+	private String username;
 	
 	@Value("${site.loginpage}")
 	private String loginPage;
 	
-	public String sendHtmlEmail(String email, String subject, String content) throws MessagingException {
+	public String sendHtmlEmail(String email, String subject, String content) {
 		MimeMessage message = mailSender.createMimeMessage();
-		
-		message.setSubject(subject);
-		message.setText(content, "utf-8", "html");
-		message.setRecipients(MimeMessage.RecipientType.TO, InternetAddress.parse(email));
-		
+		try {
+			message.setFrom(new InternetAddress(username));
+			message.setSubject(subject);
+			message.setText(content, "utf-8", "html");
+			message.setRecipients(MimeMessage.RecipientType.TO, InternetAddress.parse(email));
+		} catch (MessagingException e) {
+			e.printStackTrace();
+		}
 		mailSender.send(message);
 		return email;
 	}

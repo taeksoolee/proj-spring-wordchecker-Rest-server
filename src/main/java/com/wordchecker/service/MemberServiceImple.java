@@ -56,7 +56,6 @@ public class MemberServiceImple implements MemberService{
 		if(selectMember == null) throw new MemberNotFoundException();
 		
 		String randomPassword = UUID.randomUUID().toString().replace("-", "").substring(0, 5);
-		
 		mailManger.sendHtmlEmail(member.getEmail(), "[word-checker]비밀번호 안내", mailManger.decorateHtmlPassword(randomPassword));
 		
 		Member updateMember = new Member();

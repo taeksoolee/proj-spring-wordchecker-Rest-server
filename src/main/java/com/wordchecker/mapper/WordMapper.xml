@@ -4,12 +4,56 @@
 	<select id="selectWord" resultType="Word">
 		select word.* from word join(select no from word where member_no=#{memberNo} limit #{start}, #{length}) i on word.no=i.no order by word.no desc
 	</select>
+	
+	<select id="selectWordTest" resultType="Word">
+		<bind name="type" value="#{wordOrderType, typeHandler='org.apache.ibatis.type.EnumOrdinalTypeHandler'}"/>
+		
+		select * from word where state!=0
+		<trim prefix="and" suffix="and|or">
+			<if test="startDate != null and endDate != null">
+				(substr(write_date,1,10) between #{start} and #{end}) and
+			</if>
+			<if test="speling != null">
+				speling like concat('%',#{spling},'%') and
+			</if>
+			<if test="meaning != null">
+				meaning like concat('%',#{meaning},'%') and
+			</if>
+		</trim>
+		order by
+		<choose>
+		<when test="type == 'WRITE_DATE_DESC'">
+			write_date desc
+		</when>
+		<when test="type == 'WRITE_DATE_ASC'">
+			write_date asc
+		</when>
+		<when test="type == 'SPELING_DESC'">
+			speling desc
+		</when>
+		<when test="type == 'SPELING_ASC'">
+			speling asc
+		</when>
+		<when test="type == 'MEANING_DESC'">
+			meaning desc
+		</when>
+		<when test="type == 'MEANING_DESC'">
+			meaning asc
+		</when>
+		<otherwise>
+			write_date desc
+		</otherwise>
+		</choose>
+	</select>
+	
 	<select id="selectWrodNo" resultType="Word">
 		select * from word where no=#{no}
 	</select>
+	
 	<insert id="insertWord">
 		insert into word(speling, meaning, member_no, write_date, state) values(#{speling}, #{meaning}, #{memberNo}, now(), 1)
 	</insert>
+	
 	<update id="updateWord">
 		update word 
 		<set>
@@ -23,6 +67,7 @@
 		</set>
 		 where no=#{no}
 	</update>
+	
 	<update id="updateWordState">
 		update word set state=#{state} where no=#{no}
 	</update>
