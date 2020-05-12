@@ -7,7 +7,7 @@
 			<result column="title" property="title" />
 			<result column="content" property="content" />
 			<result column="member_no" property="memberNo" />
-			<result column="wrtie_date" property="writeDate" />
+			<result column="write_date" property="writeDate" />
 			<result column="b_state" property="state" />
 		</association>
 		<association property="member" javaType="Member">
@@ -25,8 +25,8 @@
 	<select id="selectBoardMember" resultMap="boardMember">
 		select b.no b_no, b.title, b.content, b.member_no, b.write_date, b.state b_state, 
 		m.no m_no, m.email, m.password, m.nickname, m.birthday, m.last_login, m.join_date, m.state m_state 
-		from board b join (select no from board 
-		<trim prefix="where" suffixOverrides="and|or">
+		from board b join (select no from board where state!=0 
+		<trim prefix="and" suffixOverrides="and|or">
 		<if test="title != null">
 			title like concat('%',#{title},'%') and
 		</if>
@@ -37,11 +37,11 @@
 			(substr(write_date,1,10) between #{startDate} and #{endDate}) and
 		</if>
 		</trim> 
-		limit #{start}, #{length}) i on b.no=i.no left join (select * from member
+		order by no desc limit #{start}, #{length}) i on b.no=i.no left join (select * from member
 		<if test="nickname != null">
 			where nickname like concat('%',#{nickname},'%')
 		</if>
-		) m on b.member_no=m.no order by b.no desc
+		) m on b.member_no=m.no 
 	</select>
 	
 	<select id="selectBoardNo" resultType="Board">
@@ -66,6 +66,6 @@
 	</update>
 	
 	<update id="updateBoardState">
-		update board set state=#{state} wherno=#{no}
+		update board set state=#{state} where no=#{no}
 	</update>
 </mapper>

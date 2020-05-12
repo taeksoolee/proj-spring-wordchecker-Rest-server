@@ -84,8 +84,6 @@ public class WordServiceImpl implements WordService{
 	public int modifyWordState(Word word) throws MemberNotFoundException, WrongAccessException, InvalidException, XssException {
 		if(wordDao.selectWrodNo(word.getNo()) == null) throw new WrongAccessException();
 		
-		validation.validateWord(word);
-		
 		Member requestMember = new Member();
 		requestMember.setNo(word.getMemberNo());
 		if(memberDao.selectMemberMember(requestMember) == null) throw new MemberNotFoundException();

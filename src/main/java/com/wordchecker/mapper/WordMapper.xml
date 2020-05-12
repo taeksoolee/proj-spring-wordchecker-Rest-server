@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.wordchecker.mapper.WordMapper">
 	<select id="selectWord" resultType="Word">
-		select word.* from word join(select no from word where member_no=#{memberNo} limit #{start}, #{length}) i on word.no=i.no order by word.no desc
+		select word.* from word join(select no from word where state!=0 and member_no=#{memberNo}  order by no desc limit #{start}, #{length}) i on word.no=i.no 
 	</select>
 	
 	<select id="selectWordTest" resultType="Word">
