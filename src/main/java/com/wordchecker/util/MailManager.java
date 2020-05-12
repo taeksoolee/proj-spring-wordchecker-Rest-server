@@ -46,18 +46,18 @@ public class MailManager {
 	public String decorateHtmlPassword(String password) {
 		/*
 		<div style='text-align: center; border: 1px solid lightgray; border-radius: 5px; margin: 25px auto; width: 800px; background-color: lightgoldenrodyellow;'>
-	    	<p style='font-size: 20px;'>word-checker ÀÓ½Ã ºñ¹Ğ¹øÈ£ ¾È³»</p>
+	    	<p style='font-size: 20px;'>word-checker ì„ì‹œ ë¹„ë°€ë²ˆí˜¸</p>
 	    	<p style='font-size: 30px; font-weight: bold;'>password-value</p>
-	    	<p style='color:red;'>¹İµå½Ã ºñ¹Ğ¹øÈ£¸¦ ´Ù½Ã º¯°æÇØÁÖ¼¼¿ä.</p>
-	    	<p><a href='conf-loginpage-url'>word-checker ¹Ù·Î°¡±â</a></p>
+	    	<p style='color:red;'>ì„ì‹œ ë¹„ë°€ë²ˆí˜¸ëŠ” ë°˜ë“œì‹œ ë³€ê²½í•˜ì‹œê¸¸ ë°”ëë‹ˆë‹¤.</p>
+	    	<p><a href='conf-loginpage-url'>word-checker ë°”ë¡œê°€ê¸°</a></p>
 		</div>
 		 */
 		StringBuffer html = new StringBuffer();
 		html.append("<div style='text-align: center; border: 1px solid lightgray; border-radius: 5px; margin: 25px auto; width: 800px; background-color: lightgoldenrodyellow;'>");
-			html.append("<p style='font-size: 20px;'>word-checker ÀÓ½Ã ºñ¹Ğ¹øÈ£ ¾È³»</p>");
+			html.append("<p style='font-size: 20px;'>word-checker ì„ì‹œ ë¹„ë°€ë²ˆí˜¸</p>");
 			html.append("<p style='font-size: 30px; font-weight: bold;'>" + password + "</p>");
-			html.append("<p style='color:red;'>¹İµå½Ã ºñ¹Ğ¹øÈ£¸¦ ´Ù½Ã º¯°æÇØÁÖ¼¼¿ä.</p>");
-			html.append("<p><a href='" + loginPage + "'>word-checker ¹Ù·Î°¡±â</a></p>");
+			html.append("<p style='color:red;'>ì„ì‹œ ë¹„ë°€ë²ˆí˜¸ëŠ” ë°˜ë“œì‹œ ë³€ê²½í•˜ì‹œê¸¸ ë°”ëë‹ˆë‹¤.</p>");
+			html.append("<p><a href='" + loginPage + "'>word-checker ë°”ë¡œê°€ê¸°</a></p>");
 		html.append("</div>");
 		return html.toString();
 	}

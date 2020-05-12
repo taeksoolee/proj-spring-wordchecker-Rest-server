@@ -13,10 +13,8 @@ import com.wordchecker.exception.WrongAccessException;
 
 
 public class Encryption {
-	/**
-	 	* @deprecated org.mindrot.jbcrypt.BCrypt.hashpw(String password, String salt) 사용 권장 
-	**/
-	private static String encrypt(String source) throws WrongAccessException {
+	private static String encrypt(String source) {
+		source = source + "soltString";
 		StringBuffer password= new StringBuffer();
 		
 		try {
@@ -29,14 +27,14 @@ public class Encryption {
 				password.append(Integer.toHexString(digest[i]&0xff));
 			}
 		} catch (NoSuchAlgorithmException e) {
-			throw new WrongAccessException();
+			
 		}
 		
 		return password.toString();
 	}
 	
 	public static Member encrptMemberPassword(Member member) {
-		member.setPassword(BCrypt.hashpw(member.getPassword(), BCrypt.gensalt(10)));
+		member.setPassword(encrypt(member.getPassword()));
 		return member;
 	}
 }

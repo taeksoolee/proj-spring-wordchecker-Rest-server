@@ -75,7 +75,7 @@ public class Member {
 	
 	@Override
 	public String toString() {
-		return "Word [no=" + no + ", email=" + email + ", password=" + password + ", nickname=" + nickname
+		return "Member [no=" + no + ", email=" + email + ", password=" + password + ", nickname=" + nickname
 				+ ", birthday=" + birthday + ", lastLogin=" + lastLogin + ", joinDate=" + joinDate + ", state=" + state
 				+ "]";
 	}

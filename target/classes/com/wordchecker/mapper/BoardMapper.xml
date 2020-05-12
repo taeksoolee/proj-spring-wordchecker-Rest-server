@@ -33,7 +33,7 @@
 		<if test="content != null">
 			content like concat('%',#{content},'%') and
 		</if>
-		<if test="startDate != '' and endDate != ''">
+		<if test="startDate != '' and startDate != null and endDate != '' and endDate != null">
 			(substr(write_date,1,10) between #{startDate} and #{endDate}) and
 		</if>
 		</trim> 

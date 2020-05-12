@@ -5,30 +5,27 @@ import java.util.HashMap;
 import java.util.Map;
 
 import javax.mail.MessagingException;
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.wordchecker.dto.Member;
 import com.wordchecker.exception.DuplicateMemberException;
 import com.wordchecker.exception.InvalidException;
 import com.wordchecker.exception.MemberNotFoundException;
+import com.wordchecker.exception.NotAuthException;
 import com.wordchecker.exception.WrongAccessException;
 import com.wordchecker.exception.XssException;
 import com.wordchecker.service.MemberService;
 import com.wordchecker.util.JwtManager;
-import com.wordchecker.util.MailManager;
+
+import io.jsonwebtoken.Claims;
 
 @RestController
 public class MemberController {
@@ -40,36 +37,62 @@ public class MemberController {
 	@Autowired
 	private JwtManager jwtManager;
 	
-	@RequestMapping(value="/member/search/email", method=RequestMethod.GET)
-	public Map<String, Object> getMemberSearchEmail(@ModelAttribute Member member) throws MemberNotFoundException {
-	    String email = memberService.getMemberMember(member).getEmail();
+	@RequestMapping(value="/auth/member", method=RequestMethod.GET)
+	public Member getMember(HttpServletRequest request) throws MemberNotFoundException{
+		Member member = new Member();
+		int no = jwtManager.getJwtValueToRequestAttribute(request);
+		member.setNo(no);
+		
+		Member searchMember = memberService.getMemberMember(member);
+		return searchMember;
+	}
+	
+	@RequestMapping(value="/member/search/email", method=RequestMethod.POST)
+	public Map<String, Object> getMemberSearchEmail(@RequestBody Member member){
+		Member searchMember = memberService.getMemberMember(member);
+	    String email = searchMember==null?"":searchMember.getEmail();
 		Map<String, Object> result = new HashMap<String, Object>();
 		result.put("email", email);
 		
 		return result;
 	}
 	
-	@RequestMapping(value="/member/search/password", method=RequestMethod.GET)
-	public Map<String, Object> getMemberSearchPassword(@ModelAttribute Member member) throws MemberNotFoundException, MessagingException {
+	@RequestMapping(value="/member/search/password", method=RequestMethod.POST)
+	public Map<String, Object> getMemberSearchPassword(@RequestBody Member member) throws MemberNotFoundException, MessagingException {
 		int resultRow = memberService.modifyMemberSearchPassword(member);
 		
 		Map<String, Object> result = new HashMap<String, Object>();
 		
 		result.put("result", resultRow);
-		result.put("message", "ÀÓ½Ã ºñ¹Ğ¹øÈ£¸¦ ¹ß¼ÛÇÏ¿´½À´Ï´Ù.");
+		result.put("message", "ì„ì‹œë¹„ë°€ë²ˆí˜¸ ë°œì†¡");
 		
 		return result;
 	}
 	
 	@RequestMapping(value="/member/login", method=RequestMethod.POST)
-	public Map<String, Object> getMemberLogin(@RequestBody Member member, HttpServletResponse response) throws WrongAccessException, MemberNotFoundException, UnsupportedEncodingException{
-		Member loginMember = memberService.getLogin(member, response);
+	public Map<String, Object> memberLogin(@RequestBody Member member) throws WrongAccessException, MemberNotFoundException, UnsupportedEncodingException{
+		Member loginMember = memberService.getLogin(member);
 		
 		String jwt =jwtManager.getJwt(loginMember);
 		
 		Map<String, Object> result = new HashMap<String, Object>();
-		result.put("message", "·Î±×ÀÎ¿¡ ¼º°øÇÏ¿´½À´Ï´Ù.");
+		result.put("message", "ë¡œê·¸ì¸ ì„±ê³µ");
 		result.put("jwt", jwt);
+		
+		return result;
+	}
+	
+	@RequestMapping(value="/member/check", method=RequestMethod.POST)
+	public Map<String, Object> membercCheck(HttpServletRequest request) throws WrongAccessException, MemberNotFoundException, UnsupportedEncodingException, NotAuthException{
+		String jwt = request.getHeader("jwt");
+		int no = 0;
+		if(jwt != null) {
+			Claims claim = jwtManager.convertJwtToClaim(jwt);
+			if(claim == null) throw new NotAuthException();
+			no = (int) claim.get("no");
+		}
+		Map<String, Object> result = new HashMap<String, Object>();
+		result.put("memberNo", no);
 		
 		return result;
 	}
@@ -80,7 +103,7 @@ public class MemberController {
 		
 		Map<String, Object> result = new HashMap<String, Object>();
 		result.put("result", resultRow);
-		result.put("message", "È¸¿ø°¡ÀÔ¿¡ ¼º°øÇÏ¿´½À´Ï´Ù.");
+		result.put("message", "íšŒì›ê°€ì… ì™„ë£Œ");
 		
 		return result;
 	}
@@ -94,7 +117,7 @@ public class MemberController {
 		
 		Map<String, Object> result = new HashMap<String, Object>();
 		result.put("result", resultRow);
-		result.put("message", "È¸¿øÁ¤º¸¸¦ ¼öÁ¤ÇÏ¿´½À´Ï´Ù.");
+		result.put("message", "íšŒì›ì •ë³´ ìˆ˜ì •ì™„ë£Œ");
 		
 		return result;
 	}
@@ -108,7 +131,7 @@ public class MemberController {
 		
 		Map<String, Object> result = new HashMap<String, Object>();
 		result.put("result", resultRow);
-		result.put("message", "È¸¿ø»óÅÂ¸¦ ¼öÁ¤ÇÏ¿´½À´Ï´Ù.");
+		result.put("message", "íšŒì›ìƒíƒœ ìˆ˜ì •ì™„ë£Œ");
 		
 		return result;
 	}

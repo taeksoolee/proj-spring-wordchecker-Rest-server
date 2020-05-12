@@ -11,19 +11,22 @@
 	</select>
  -->	
 	<select id="selectMemberMember" resultType="Member">
-		select * from member
+		select no, email, nickname, birthday, state from member
 		<trim prefix="where" suffixOverrides="or|and">
 		state!=#{state} and
 		<if test="no != 0">
 			no=#{no} and
 		</if>
-		<if test="email != null">
+		<if test="email != null and !email.equals('')">
 			email=#{email} and
 		</if>
-		<if test="nickname != null">
+		<if test="password != null and !password.equals('')">
+			password=#{password} and
+		</if>
+		<if test="nickname != null and !nickname.equals('')">
 			nickname=#{nickname} and
 		</if>
-		<if test="birthday != null">
+		<if test="birthday != null and !birthday.equals('')">
 			birthday=#{birthday} and
 		</if>
 		</trim>
@@ -36,16 +39,16 @@
 	<update id="updateMember">
 		update member
 			<set>
-				<if test="email != null">
+				<if test="email != null and !email.equals('')">
 					email=#{email}, 
 				</if>
-				<if test="password != null">
+				<if test="password != null and !password.equals('')">
 					password=#{password}, 
 				</if>
-				<if test="nickname != null">
+				<if test="nickname != null and !nickname.equals('')">
 				 	nickname=#{nickname}, 
 				</if>
-				<if test="birthday != null">
+				<if test="birthday != null and !birthday.equals('')">
 					birthday=#{birthday}, 
 				</if>
 			</set> 

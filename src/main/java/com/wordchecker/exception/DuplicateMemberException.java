@@ -1,10 +1,9 @@
 package com.wordchecker.exception;
 
-// Áßº¹È¸¿øÀÌ ÀÖÀ» °æ¿ì ¹ß»ıÇÏ´Â ¿¹¿Ü
 public class DuplicateMemberException extends Exception{
 	private static final long serialVersionUID = 1L;
 	
 	public DuplicateMemberException() {
-		super("Áßº¹µÈ È¸¿øÀÌ Á¸Àç ÇÕ´Ï´Ù.");
+		super("ì¤‘ë³µëœ íšŒì›ì •ë³´ ì¡´ì¬ ì—ëŸ¬");
 	}
 }

@@ -15,7 +15,7 @@ import com.wordchecker.exception.XssException;
 
 public interface MemberService {
 	Member getMemberMember(Member member);
-	Member getLogin(Member member, HttpServletResponse response) throws WrongAccessException, MemberNotFoundException, UnsupportedEncodingException;
+	Member getLogin(Member member) throws WrongAccessException, MemberNotFoundException, UnsupportedEncodingException;
 	int modifyMemberSearchPassword(Member member) throws MemberNotFoundException, MessagingException;
 	int addMember(Member member) throws DuplicateMemberException, InvalidException, XssException;
 	int modifyMember(Member member) throws InvalidException, WrongAccessException, MemberNotFoundException, XssException;

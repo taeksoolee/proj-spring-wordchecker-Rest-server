@@ -17,6 +17,7 @@ public class ExceptionController {
 	@ResponseStatus(code=HttpStatus.BAD_GATEWAY)
 	@ResponseBody
 	public Map<String, Object> ExceptionHandler(HttpServletResponse response, Exception e) {
+		e.printStackTrace();
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("message", e.getMessage());
 		return map;

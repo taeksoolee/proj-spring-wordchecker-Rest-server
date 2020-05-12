@@ -50,14 +50,18 @@ public class WordServiceImpl implements WordService{
 
 	@Override
 	@Transactional
-	public int addWord(Word word) throws MemberNotFoundException, InvalidException, XssException {
-		validation.validateWord(word);
+	public int addWord(List<Word> wordList) throws MemberNotFoundException, InvalidException, XssException {
+		for(Word word : wordList) {
+			validation.validateWord(word);
+		}
 		
 		Member requestMember = new Member();
-		requestMember.setNo(word.getMemberNo());
+		for(Word word : wordList) {
+			requestMember.setNo(word.getMemberNo());
+		}
 		if(memberDao.selectMemberMember(requestMember) == null) throw new MemberNotFoundException();
 		
-		return wordDao.insertWord(word);
+		return wordDao.insertWord(wordList);
 	}
 
 	@Override

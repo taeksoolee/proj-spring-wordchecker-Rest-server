@@ -1,10 +1,9 @@
 package com.wordchecker.exception;
 
-// ·Î±×ÀÎµÇÁö ¾Ê¾ÒÀ»‹š ¿¹¿Ü
 public class NotAuthException extends Exception {
 	private static final long serialVersionUID = 1L;
 
 	public NotAuthException() {
-		super("·Î±×ÀÎ ÇØÁÖ¼¼¿ä.");
+		super("ì¸ì¦ì‹¤íŒ¨");
 	}
 }

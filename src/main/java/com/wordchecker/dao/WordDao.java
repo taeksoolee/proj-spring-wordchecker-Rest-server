@@ -10,7 +10,7 @@ public interface WordDao {
 	List<Word> selectWord(WordFilter filter);
 	List<Word> selectWordTest(WordTestFilter filter);
 	Word selectWrodNo(int no);
-	int insertWord(Word word);
+	int insertWord(List<Word> wordList);
 	int updateWord(Word word);
 	int updateWordState(Word word);
 }

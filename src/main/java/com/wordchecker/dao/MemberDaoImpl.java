@@ -11,17 +11,6 @@ import com.wordchecker.mapper.MemberMapper;
 public class MemberDaoImpl implements MemberDao {
 	@Autowired
 	private SqlSession sqlSession;
-/*
-	@Override
-	public Member selectMemberNo(int no) {
-		return sqlSession.getMapper(MemberMapper.class).selectMemberNo(no);
-	}
-
-	@Override
-	public Member selectMemberEmail(String email) {
-		return sqlSession.getMapper(MemberMapper.class).selectMemberEmail(email);
-	}
-*/
 	
 	@Override
 	public Member selectMemberMember(Member member) {

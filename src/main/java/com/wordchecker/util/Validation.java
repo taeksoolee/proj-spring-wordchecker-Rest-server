@@ -17,16 +17,18 @@ import com.wordchecker.exception.XssException;
 
 @Component
 public class Validation {
-	public static final String MEMBER_EMAIL_REGEX = "";
-	public static final String MEMBER_PASSWORD_REGEX = "";
-	public static final String MEMBER_NICKNAME_REGEX = "";
-	public static final String MEMBER_BIRTHDAY_REGEX = "";
-	public static final String WORD_SPELING_REGEX = "";
-	public static final String WORD_MEANING_REGEX = "";
-	public static final String BOARD_TITLE_REGEX = "";
-	public static final String BOARD_CONTENT_REGEX = "";
+	public static final String MEMBER_EMAIL_REGEX = "^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$";
+	// ìˆ«ì, íŠ¹ë¬¸ ê° 1íšŒ ì´ìƒ, ì˜ë¬¸ì€ 2ê°œ ì´ìƒ ì‚¬ìš©í•˜ì—¬ 8ìë¦¬ ì´ìƒ ì…ë ¥
+	public static final String MEMBER_PASSWORD_REGEX = "(?=.*\\d{1,50})(?=.*[~`!@#$%\\^&*()-+=]{1,50})(?=.*[a-zA-Z]{2,50}).{8,50}$";
+	// 1~10ìë¦¬ ë¬¸ì
+	public static final String MEMBER_NICKNAME_REGEX = "^[a-zA-Z~`!@#$%\\/\\/^&*()-+=0-9]{1,10}$";
+	public static final String MEMBER_BIRTHDAY_REGEX = "^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$";
+	public static final String WORD_SPELING_REGEX = "^[a-zA-Z]{0,30}$";
+	public static final String WORD_MEANING_REGEX = "^[ê°€-í£]{0,30}$";
+	public static final String BOARD_TITLE_REGEX = "^.{1,30}$";
+	public static final String BOARD_CONTENT_REGEX = "^.{0,50}$";
 	
-	public static final String DATE_REGEX = "";
+	public static final String DATE_REGEX = "^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$";
 	
 	private void rejectXss(String string) throws XssException{
 		if(string.split("[<>]").length != 1) throw new XssException();
@@ -45,7 +47,6 @@ public class Validation {
 		rejectXss(board.getContent());
 	}
 	
-	/** ÀÌ Å¬·¡½º ³» »ó¼ö¸¦ ÀÌ¿ëÇÑ´Â °ÍÀ» ±ÇÀåÇÔ */
 	public void testRegExp(String regex, String input) throws InvalidException{
 		if(!Pattern.matches(regex, input)) throw new InvalidException();
 	}
@@ -54,7 +55,7 @@ public class Validation {
 		List<String> regexList = map.get("regexList"); 
 		List<String> inputList = map.get("inputList"); 
 		try {
-			if(regexList.size() == inputList.size()) throw new DevMistakeException("¸Ê Çü½ÄÀÌ ÀÏÄ¡ÇÏÁö ¾Ê½À´Ï´Ù.(map¿¡´Â regexList¿Í inputList °´Ã¼°¡ Á¸ÀçÇØ¾ß ÇÕ´Ï´Ù)");
+			if(regexList.size() == inputList.size()) throw new DevMistakeException("ë§µ í˜•ì‹ì´ ì¼ì¹˜í•˜ì§€ ì•ŠìŠµë‹ˆë‹¤.(mapì—ëŠ” regexListì™€ inputList ê°ì²´ê°€ ì¡´ì¬í•´ì•¼ í•©ë‹ˆë‹¤)");
 		} catch (DevMistakeException e) {
 			logger.error(e.getMessage());
 		}

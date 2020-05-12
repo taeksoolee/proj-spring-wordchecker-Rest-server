@@ -55,7 +55,7 @@ public class BoardController {
 		
 		Map<String, Object> result = new HashMap<String, Object>();
 		result.put("result", resultRow);
-		result.put("message", "°Ô½Ã¹°ÀÌ ÀÛ¼º µÇ¾ú½À´Ï´Ù.");
+		result.put("message", "ê²Œì‹œê¸€ ë“±ë¡");
 		
 		return result;
 	}
@@ -68,7 +68,7 @@ public class BoardController {
 		
 		Map<String, Object> result = new HashMap<String, Object>();
 		result.put("result", resultRow);
-		result.put("message", "°Ô½Ã¹°ÀÌ ÀÛ¼º µÇ¾ú½À´Ï´Ù.");
+		result.put("message", "ê²Œì‹œê¸€ ìˆ˜ì •ì™„ë£Œ");
 		
 		return result;
 	}
@@ -80,14 +80,7 @@ public class BoardController {
 		int resultRow = boardService.modifyBoardState(board);
 		Map<String, Object> result = new HashMap<String, Object>();
 		result.put("result", resultRow);
-		switch (board.getState()) {
-		case 0:
-			result.put("message", "°Ô½Ã¹°ÀÌ ºñÈ°¼ºÈ­ µÇ¾ú½À´Ï´Ù.");
-			break;
-		case 1:
-			result.put("message", "°Ô½Ã¹°ÀÌ È°¼ºÈ­ µÇ¾ú½À´Ï´Ù.");
-			break;
-		}
+		result.put("message", "ê²Œì‹œìƒíƒœ ìˆ˜ì •ì™„ë£Œ");
 		return result;
 	}
 }

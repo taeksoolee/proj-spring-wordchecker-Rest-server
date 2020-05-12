@@ -32,8 +32,8 @@ public class WordDaoImpl implements WordDao{
 	}
 
 	@Override
-	public int insertWord(Word word) {
-		return sqlSession.getMapper(WordMapper.class).insertWord(word);
+	public int insertWord(List<Word> wordList) {
+		return sqlSession.getMapper(WordMapper.class).insertWord(wordList);
 	}
 
 	@Override

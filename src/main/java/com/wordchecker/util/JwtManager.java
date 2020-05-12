@@ -73,6 +73,7 @@ public class JwtManager {
 	
 	public Claims convertJwtToClaim(String jwt) {
 		Claims claims = null;
+		
 		try {
 			claims = Jwts.parser().setSigningKey(DatatypeConverter.parseBase64Binary(secretKey)).parseClaimsJws(jwt).getBody();
         }catch (ExpiredJwtException exception) {

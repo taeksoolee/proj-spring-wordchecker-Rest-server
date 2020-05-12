@@ -1,10 +1,9 @@
 package com.wordchecker.exception;
 
-// À¯È¿¼º °Ë»ç ½ÇÆĞ½Ã ¹ß»ıÇÏ´Â ¿¹¿Ü
 public class InvalidException extends Exception{
 	private static final long serialVersionUID = 1L;
 	
 	public InvalidException() {
-		super("¿äÃ»ÇÏ½Å ¹®ÀÚÀÇ Çü½ÄÀÌ ¸ÂÁö ¾Ê½À´Ï´Ù.");
+		super("ë¬¸êµ¬ ê²€ì¦ ì˜¤ë¥˜");
 	}
 }

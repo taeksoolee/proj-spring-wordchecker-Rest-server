@@ -1,10 +1,9 @@
 package com.wordchecker.exception;
 
-// Çã¿ëµÇÁö ¾Ê´Â Á¢±ÙÀ» ½ÃµµÇÒ ‹š ¹ß»ıÇÏ´Â ¿¹¿Ü
 public class WrongAccessException extends Exception{
 	private static final long serialVersionUID = 1L;
 
 	public WrongAccessException() {
-		super("Àß¸øµÈ Á¢±ÙÀÔ´Ï´Ù.");
+		super("ì˜ëª»ëœ ì ‘ê·¼ ì˜¤ë¥˜");
 	}
 }

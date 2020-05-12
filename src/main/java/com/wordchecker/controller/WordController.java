@@ -42,6 +42,13 @@ public class WordController {
 		word.setMemberNo(memberNo);
 	}
 	
+	private void setMemberNofromJwt(List<Word> wordList, HttpServletRequest request) throws MemberNotFoundException {
+		int memberNo = jwtManager.getJwtValueToRequestAttribute(request);
+		for(Word word : wordList) {
+			word.setMemberNo(memberNo);
+		}
+	}
+	
 	@RequestMapping(value="/auth/word/test/{orderType}", method=RequestMethod.POST)
 	public List<Word> getWordTest(@ModelAttribute WordTestFilter filter, @PathVariable int orderType, HttpServletRequest request) throws WrongAccessException, MemberNotFoundException, InvalidException{
 		int memberNo = jwtManager.getJwtValueToRequestAttribute(request);
@@ -80,13 +87,15 @@ public class WordController {
 	}
 	
 	@RequestMapping(value="/auth/word", method=RequestMethod.POST)
-	public Map<String, Object> addWord(@RequestBody Word word, HttpServletRequest request) throws InvalidException, WrongAccessException, MemberNotFoundException, XssException{
-		setMemberNofromJwt(word, request);
-		if(word.getMeaning() == null && word.getSpeling() == null) throw new WrongAccessException();
-		int resultRow = wordService.addWord(word);
+	public Map<String, Object> addWord(@RequestBody List<Word> wordList, HttpServletRequest request) throws InvalidException, WrongAccessException, MemberNotFoundException, XssException{
+		setMemberNofromJwt(wordList, request);
+		for(Word word : wordList) {
+			if(word.getMeaning() == null && word.getSpeling() == null) throw new WrongAccessException();
+		}
+		int resultRow = wordService.addWord(wordList);
 		Map<String, Object> result = new HashMap<String, Object>();
 		result.put("result", resultRow);
-		result.put("message", "¥‹æÓ µÓ∑œ¿Ã øœ∑·µ«æ˙Ω¿¥œ¥Ÿ.");
+		result.put("message", "Îã®Ïñ¥Îì±Î°ù");
 		
 		return result;
 	}
@@ -99,7 +108,7 @@ public class WordController {
 		
 		Map<String, Object> result = new HashMap<String, Object>();
 		result.put("result", resultRow);
-		result.put("message", "¥‹æÓ ºˆ¡§¿Ã øœ∑·µ«æ˙Ω¿¥œ¥Ÿ.");
+		result.put("message", "Îã®Ïñ¥ÏàòÏ†ï");
 		
 		return result;
 	}
@@ -111,14 +120,7 @@ public class WordController {
 		
 		Map<String, Object> result = new HashMap<String, Object>();
 		result.put("result", resultRow);
-		switch(word.getState()) {
-			case 0:
-				result.put("message", "¥‹æÓ ∫Ò»∞º∫»≠¿Ã øœ∑·µ«æ˙Ω¿¥œ¥Ÿ.");
-				break;
-			case 1:
-				result.put("message", "¥‹æÓ »∞º∫»≠¿Ã øœ∑·µ«æ˙Ω¿¥œ¥Ÿ.");
-				break;
-		}
+		result.put("message", "Îã®Ïñ¥ ÏÉÅÌÉú ÏàòÏ†ï");
 		
 		return result;
 	}

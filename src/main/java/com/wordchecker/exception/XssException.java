@@ -4,6 +4,6 @@ public class XssException extends Exception{
 	private static final long serialVersionUID = 1L;
 
 	public XssException() {
-		super("ют╥б Ё╩©К©║ еб╠в╟║ ╩Г©К╣г╬З╫ю╢о╢ы.");
+		super("Л·┘К═╔ К┌╢Л ╘Л≈░ М┐°Й╥╦ Л┌╛Л ╘");
 	}
 }

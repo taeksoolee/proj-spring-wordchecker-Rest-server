@@ -1,10 +1,9 @@
 package com.wordchecker.exception;
 
-//È¸¿ø Á¤º¸¸¦ Ã£À» ¼ö ¾øÀ» ¶§ ¹ß»ıµÇ´Â ¿¹¿Ü
 public class MemberNotFoundException extends Exception{
 	private static final long serialVersionUID = 1L;
 	
 	public MemberNotFoundException() {
-		super("¿äÃ»ÇÏ½Å È¸¿ø Á¤º¸¸¦ Ã£À» ¼ö ¾ø½À´Ï´Ù.");
+		super("íšŒì›ì •ë³´ ì°¾ì„ìˆ˜ ì—†ìŠµë‹ˆë‹¤.");
 	}
 }

@@ -50,8 +50,17 @@
 		select * from word where no=#{no}
 	</select>
 	
-	<insert id="insertWord">
-		insert into word(speling, meaning, member_no, write_date, state) values(#{speling}, #{meaning}, #{memberNo}, now(), 1)
+	<insert id="insertWord" parameterType="java.util.List">
+		<if test='list.size() != 0'>
+			insert into word(speling, meaning, member_no, write_date, state) values
+			<trim suffixOverrides=",">
+				<foreach collection="list" item="word">
+					<if test="word != null">
+						(#{word.speling}, #{word.meaning}, #{word.memberNo}, now(), 1),
+					</if>
+				</foreach>
+			</trim>
+		</if>
 	</insert>
 	
 	<update id="updateWord">

@@ -19,7 +19,6 @@ import com.wordchecker.exception.MemberNotFoundException;
 import com.wordchecker.exception.WrongAccessException;
 import com.wordchecker.exception.XssException;
 import com.wordchecker.util.Encryption;
-import com.wordchecker.util.JwtManager;
 import com.wordchecker.util.MailManager;
 import com.wordchecker.util.Validation;
 
@@ -39,7 +38,8 @@ public class MemberServiceImple implements MemberService{
 	
 	@Override
 	@Transactional
-	public Member getLogin(Member member, HttpServletResponse response) throws WrongAccessException, MemberNotFoundException, UnsupportedEncodingException {
+	public Member getLogin(Member member) throws WrongAccessException, MemberNotFoundException, UnsupportedEncodingException {
+		System.out.println(member);
 		if(!(member.getEmail() != null && member.getPassword() != null)) throw new WrongAccessException();
 		
 		Member loginMember = memberDao.selectMemberMember(Encryption.encrptMemberPassword(member));
@@ -56,7 +56,7 @@ public class MemberServiceImple implements MemberService{
 		if(selectMember == null) throw new MemberNotFoundException();
 		
 		String randomPassword = UUID.randomUUID().toString().replace("-", "").substring(0, 5);
-		mailManger.sendHtmlEmail(member.getEmail(), "[word-checker]ºñ¹Ð¹øÈ£ ¾È³»", mailManger.decorateHtmlPassword(randomPassword));
+		mailManger.sendHtmlEmail(member.getEmail(), "[word-checker]ë¹„ë°€ë²ˆí˜¸ ì•ˆë‚´", mailManger.decorateHtmlPassword(randomPassword));
 		
 		Member updateMember = new Member();
 		updateMember.setNo(selectMember.getNo());
@@ -70,8 +70,7 @@ public class MemberServiceImple implements MemberService{
 	@Transactional
 	public int addMember(Member member) throws DuplicateMemberException, InvalidException, XssException {
 		validation.validateMember(member);
-		
-		//Áßº¹È¸¿ø È®ÀÎ
+		System.out.println(member);
 		Member tempMember = new Member();
 		tempMember.setEmail(member.getEmail());
 		if(memberDao.selectMemberMember(tempMember) != null) throw new DuplicateMemberException();

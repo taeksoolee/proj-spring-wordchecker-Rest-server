@@ -25,19 +25,11 @@ public class AuthFilter implements Filter{
 	@Override
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
 			throws IOException, ServletException {
-		Cookie[] cookies = ((HttpServletRequest)request).getCookies();
-		String jwt = "";
-		if(cookies != null) {
-			for(Cookie cookie : cookies) {
-				if(cookie.getName().equals("jwt")) {
-					jwt = cookie.getValue();
-				}
-			}
-		}
-		
+		System.out.println(((HttpServletRequest)request).getHeaderNames());
+		String jwt = ((HttpServletRequest)request).getHeader("jwt");
+		System.out.println(jwt);
 		try {
-			if(jwt.equals(""))
-				throw new NotAuthException();
+			if(!(jwt != null && !jwt.equals(""))) throw new NotAuthException();
 			request.setAttribute("jwt", jwt);
 			chain.doFilter(request, response);
 		} catch (NotAuthException e) {
