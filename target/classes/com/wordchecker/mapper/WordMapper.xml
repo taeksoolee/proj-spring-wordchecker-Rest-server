@@ -1,20 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.wordchecker.mapper.WordMapper">
-	<select id="selectWord" resultType="Word">
+	<select id="selectWordList" resultType="Word">
 		select word.* from word join(select no from word where state!=0 and member_no=#{memberNo}  order by no desc limit #{start}, #{length}) i on word.no=i.no 
 	</select>
 	
 	<select id="selectWordTest" resultType="Word">
 		<bind name="type" value="#{wordOrderType, typeHandler='org.apache.ibatis.type.EnumOrdinalTypeHandler'}"/>
 		
-		select * from word where state!=0
-		<trim prefix="and" suffix="and|or">
+		select * from word where state!=0 and member_no=#{memberNo}
+		<trim prefix="and" suffixOverrides="and|or">
 			<if test="startDate != null and endDate != null">
-				(substr(write_date,1,10) between #{start} and #{end}) and
+				(substr(write_date,1,10) between #{startDate} and #{endDate}) and
 			</if>
 			<if test="speling != null">
-				speling like concat('%',#{spling},'%') and
+				speling like concat('%',#{speling},'%') and
 			</if>
 			<if test="meaning != null">
 				meaning like concat('%',#{meaning},'%') and
@@ -44,6 +44,7 @@
 			write_date desc
 		</otherwise>
 		</choose>
+		limit 0, #{count}
 	</select>
 	
 	<select id="selectWrodNo" resultType="Word">

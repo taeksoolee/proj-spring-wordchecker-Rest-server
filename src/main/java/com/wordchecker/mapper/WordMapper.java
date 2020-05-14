@@ -7,7 +7,7 @@ import com.wordchecker.dto.WordFilter;
 import com.wordchecker.dto.WordTestFilter;
 
 public interface WordMapper {
-	List<Word> selectWord(WordFilter filter);
+	List<Word> selectWordList(WordFilter filter);
 	List<Word> selectWordTest(WordTestFilter filter);
 	Word selectWrodNo(int no);
 	int insertWord(List<Word> wordList);

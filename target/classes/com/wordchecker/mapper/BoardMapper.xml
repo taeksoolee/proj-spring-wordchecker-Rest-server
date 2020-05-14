@@ -25,7 +25,7 @@
 	<select id="selectBoardMember" resultMap="boardMember">
 		select b.no b_no, b.title, b.content, b.member_no, b.write_date, b.state b_state, 
 		m.no m_no, m.email, m.password, m.nickname, m.birthday, m.last_login, m.join_date, m.state m_state 
-		from board b join (select no from board where state!=0 
+		from (select * from board where state!=0 
 		<trim prefix="and" suffixOverrides="and|or">
 		<if test="title != null">
 			title like concat('%',#{title},'%') and
@@ -37,11 +37,11 @@
 			(substr(write_date,1,10) between #{startDate} and #{endDate}) and
 		</if>
 		</trim> 
-		order by no desc limit #{start}, #{length}) i on b.no=i.no left join (select * from member
+		) b left join (select * from member
 		<if test="nickname != null">
 			where nickname like concat('%',#{nickname},'%')
 		</if>
-		) m on b.member_no=m.no 
+		) m on b.member_no=m.no order by b_no desc limit #{start}, #{length} 
 	</select>
 	
 	<select id="selectBoardNo" resultType="Board">
@@ -55,10 +55,10 @@
 		update board 
 		<set>
 			<if test="title != null">
-				title=#{title}
+				title=#{title},
 			</if>
 			<if test="content!= null">
-				content=#{content}
+				content=#{content},
 			</if>
 			write_date=now()
 		</set>

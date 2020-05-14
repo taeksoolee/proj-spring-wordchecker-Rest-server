@@ -17,8 +17,8 @@ public class WordDaoImpl implements WordDao{
 	private SqlSession sqlSession;
 	
 	@Override
-	public List<Word> selectWord(WordFilter filter) {
-		return sqlSession.getMapper(WordMapper.class).selectWord(filter);
+	public List<Word> selectWordList(WordFilter filter) {
+		return sqlSession.getMapper(WordMapper.class).selectWordList(filter);
 	}
 	
 	@Override
@@ -27,7 +27,7 @@ public class WordDaoImpl implements WordDao{
 	}
 
 	@Override
-	public Word selectWrodNo(int no) {
+	public Word selectWordNo(int no) {
 		return sqlSession.getMapper(WordMapper.class).selectWrodNo(no);
 	}
 

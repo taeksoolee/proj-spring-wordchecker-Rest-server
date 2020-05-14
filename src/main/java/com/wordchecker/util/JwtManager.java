@@ -44,9 +44,9 @@ public class JwtManager {
 	@Value("${jwt.defaultExpMinute}")
 	private String defaultExpMinute;
 	
-	public String getJwt(int minite, Member member) throws UnsupportedEncodingException {
+	public String getJwt(long timestamp, Member member) throws UnsupportedEncodingException {
 		SignatureAlgorithm signatureAlgorithm = SignatureAlgorithm.HS256;
-        Date expireTime = new Date(System.currentTimeMillis() + (60*1000)*minite);
+        Date expireTime = new Date(timestamp);
         byte[] apiKeySecretBytes = DatatypeConverter.parseBase64Binary(secretKey);
         Key signingKey = new SecretKeySpec(apiKeySecretBytes, signatureAlgorithm.getJcaName());
 
@@ -57,7 +57,6 @@ public class JwtManager {
         Map<String, Object> map= new HashMap<String, Object>();
 
         map.put("no", member.getNo());
-
         JwtBuilder builder = Jwts.builder().setHeader(headerMap)
                 .setClaims(map)
                 .setExpiration(expireTime)
@@ -67,8 +66,7 @@ public class JwtManager {
 	}
 	
 	public String getJwt(Member member) throws UnsupportedEncodingException {
-		System.out.println(alg + "|" + typ + "|" + defaultExpMinute + "|" + secretKey);
-		return getJwt(Integer.parseInt(defaultExpMinute), member);
+		return getJwt(System.currentTimeMillis() + (60*1000)*Integer.parseInt(defaultExpMinute), member);
 	}
 	
 	public Claims convertJwtToClaim(String jwt) {
@@ -90,10 +88,12 @@ public class JwtManager {
 		int no = convertJwtToClaim(jwt)!=null?(Integer)convertJwtToClaim(jwt).get("no"):0;
 		
 		if(no == 0) throw new MemberNotFoundException();
+		
+		
 			
 		return no;
 	}
-
+	
 	@Override
 	public String toString() {
 		return "JwtManager [secretKey=" + secretKey + ", typ=" + typ + ", alg=" + alg + ", defaultExpMinute="

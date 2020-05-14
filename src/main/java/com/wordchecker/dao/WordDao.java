@@ -7,9 +7,9 @@ import com.wordchecker.dto.WordFilter;
 import com.wordchecker.dto.WordTestFilter;
 
 public interface WordDao {
-	List<Word> selectWord(WordFilter filter);
+	List<Word> selectWordList(WordFilter filter);
 	List<Word> selectWordTest(WordTestFilter filter);
-	Word selectWrodNo(int no);
+	Word selectWordNo(int no);
 	int insertWord(List<Word> wordList);
 	int updateWord(Word word);
 	int updateWordState(Word word);

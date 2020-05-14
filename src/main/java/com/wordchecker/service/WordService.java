@@ -13,9 +13,9 @@ import com.wordchecker.exception.WrongAccessException;
 import com.wordchecker.exception.XssException;
 
 public interface WordService {
-	List<Word> getWord(WordFilter filter);
+	List<Word> getWordList(WordFilter filter);
 	List<Word> getWordTest(WordTestFilter filter) throws InvalidException;
-	Word getWrodNo(int no);
+	Word getWordNo(int no);
 	int addWord(List<Word> wordList) throws MemberNotFoundException, InvalidException, XssException;
 	int modifyWord(Word word) throws MemberNotFoundException, WrongAccessException, InvalidException, XssException;
 	int modifyWordState(Word word) throws MemberNotFoundException, WrongAccessException, InvalidException, XssException;

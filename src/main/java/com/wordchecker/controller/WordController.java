@@ -50,7 +50,32 @@ public class WordController {
 	}
 	
 	@RequestMapping(value="/auth/word/test/{orderType}", method=RequestMethod.POST)
-	public List<Word> getWordTest(@ModelAttribute WordTestFilter filter, @PathVariable int orderType, HttpServletRequest request) throws WrongAccessException, MemberNotFoundException, InvalidException{
+	public List<Word> getWordTest(@RequestBody WordTestFilter filter, @PathVariable int orderType, HttpServletRequest request) throws WrongAccessException, MemberNotFoundException, InvalidException{
+		System.out.println(filter);
+		
+		switch (orderType) {
+		case 0:
+			filter.setWordOrderType(WordOrderType.WRITE_DATE_DESC);
+			break;
+		case 1:
+			filter.setWordOrderType(WordOrderType.WRITE_DATE_DESC);
+			break;
+		case 2:
+			filter.setWordOrderType(WordOrderType.SPELING_DESC);
+			break;
+		case 3:
+			filter.setWordOrderType(WordOrderType.SPELING_ASC);
+			break;
+		case 4:
+			filter.setWordOrderType(WordOrderType.MEANING_DESC);
+			break;
+		case 5:
+			filter.setWordOrderType(WordOrderType.MEANING_ASC);
+			break;
+		default:
+			filter.setWordOrderType(WordOrderType.WRITE_DATE_DESC);
+		}
+		
 		int memberNo = jwtManager.getJwtValueToRequestAttribute(request);
 		filter.setMemberNo(memberNo);
 		
@@ -83,7 +108,12 @@ public class WordController {
 		int memberNo = jwtManager.getJwtValueToRequestAttribute(request);
 		filter.setMemberNo(memberNo);
 		
-		return wordService.getWord(filter);
+		return wordService.getWordList(filter);
+	}
+	
+	@RequestMapping(value="/auth/word/no/{no}", method=RequestMethod.GET)
+	public Word getWordList(@PathVariable int no, HttpServletRequest request) throws WrongAccessException, MemberNotFoundException{
+		return wordService.getWordNo(no);
 	}
 	
 	@RequestMapping(value="/auth/word", method=RequestMethod.POST)

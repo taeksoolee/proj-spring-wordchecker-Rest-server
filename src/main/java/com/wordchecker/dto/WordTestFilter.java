@@ -3,18 +3,25 @@ package com.wordchecker.dto;
 import com.wordchecker.util.WordOrderType;
 
 public class WordTestFilter{
-	private String StartDate;
+	private int count;
+	private String startDate;
 	private String endDate;
 	private String speling;
 	private String meaning;
 	private int memberNo;
 	private WordOrderType wordOrderType;
 	
+	public int getCount() {
+		return count;
+	}
+	public void setCount(int count) {
+		this.count = count;
+	}
 	public String getStartDate() {
-		return StartDate;
+		return startDate;
 	}
 	public void setStartDate(String startDate) {
-		StartDate = startDate;
+		this.startDate = startDate;
 	}
 	public String getEndDate() {
 		return endDate;
@@ -49,7 +56,7 @@ public class WordTestFilter{
 	
 	@Override
 	public String toString() {
-		return "WordTestFilter [StartDate=" + StartDate + ", endDate=" + endDate + ", speling=" + speling + ", meaning="
+		return "WordTestFilter [count=" + count + "startDate=" + startDate + ", endDate=" + endDate + ", speling=" + speling + ", meaning="
 				+ meaning + ", memberNo=" + memberNo + ", wordOrderType=" + wordOrderType + "]";
 	}
 }

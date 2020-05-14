@@ -33,8 +33,8 @@ public class WordServiceImpl implements WordService{
 	private Validation validation;
 	
 	@Override
-	public List<Word> getWord(WordFilter filter) {
-		return wordDao.selectWord(filter);
+	public List<Word> getWordList(WordFilter filter) {
+		return wordDao.selectWordList(filter);
 	}
 
 	@Override
@@ -44,8 +44,8 @@ public class WordServiceImpl implements WordService{
 	}
 	
 	@Override
-	public Word getWrodNo(int no) {
-		return wordDao.selectWrodNo(no);
+	public Word getWordNo(int no) {
+		return wordDao.selectWordNo(no);
 	}
 
 	@Override
@@ -67,7 +67,7 @@ public class WordServiceImpl implements WordService{
 	@Override
 	@Transactional
 	public int modifyWord(Word word) throws MemberNotFoundException, WrongAccessException, InvalidException, XssException {
-		if(wordDao.selectWrodNo(word.getNo()) == null) throw new WrongAccessException();
+		if(wordDao.selectWordNo(word.getNo()) == null) throw new WrongAccessException();
 		
 		validation.validateWord(word);
 		
@@ -82,7 +82,7 @@ public class WordServiceImpl implements WordService{
 	@Override
 	@Transactional
 	public int modifyWordState(Word word) throws MemberNotFoundException, WrongAccessException, InvalidException, XssException {
-		if(wordDao.selectWrodNo(word.getNo()) == null) throw new WrongAccessException();
+		if(wordDao.selectWordNo(word.getNo()) == null) throw new WrongAccessException();
 		
 		Member requestMember = new Member();
 		requestMember.setNo(word.getMemberNo());

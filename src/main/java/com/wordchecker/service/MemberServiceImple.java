@@ -86,7 +86,7 @@ public class MemberServiceImple implements MemberService{
 		
 		validation.validateMember(member);
 		
-		if(!(member.getPassword() == null && member.getPassword().equals(""))) {
+		if(member.getPassword() != null && !member.getPassword().equals("")) {
 			Encryption.encrptMemberPassword(member);
 		}
 		
