@@ -51,7 +51,6 @@ public class WordController {
 	
 	@RequestMapping(value="/auth/word/test/{orderType}", method=RequestMethod.POST)
 	public List<Word> getWordTest(@RequestBody WordTestFilter filter, @PathVariable int orderType, HttpServletRequest request) throws WrongAccessException, MemberNotFoundException, InvalidException{
-		System.out.println(filter);
 		
 		switch (orderType) {
 		case 0:
@@ -78,27 +77,6 @@ public class WordController {
 		
 		int memberNo = jwtManager.getJwtValueToRequestAttribute(request);
 		filter.setMemberNo(memberNo);
-		
-		switch (orderType) {
-		case 1:
-			filter.setWordOrderType(WordOrderType.WRITE_DATE_DESC);
-			break;
-		case 2:
-			filter.setWordOrderType(WordOrderType.WRITE_DATE_ASC);
-			break;
-		case 3:
-			filter.setWordOrderType(WordOrderType.SPELING_DESC);
-			break;
-		case 4:
-			filter.setWordOrderType(WordOrderType.SPELING_ASC);
-			break;
-		case 5:
-			filter.setWordOrderType(WordOrderType.MEANING_DESC);
-			break;
-		case 6:
-			filter.setWordOrderType(WordOrderType.MEANING_ASC);
-			break;
-		}
 		
 		return wordService.getWordTest(filter);
 	}

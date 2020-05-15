@@ -22,22 +22,22 @@
 		</trim>
 		order by
 		<choose>
-		<when test="type == 'WRITE_DATE_DESC'">
+		<when test="wordOrderType == type.WRITE_DATE_DESC">
 			write_date desc
 		</when>
-		<when test="type == 'WRITE_DATE_ASC'">
+		<when test="wordOrderType == type.WRITE_DATE_ASC">
 			write_date asc
 		</when>
-		<when test="type == 'SPELING_DESC'">
+		<when test="wordOrderType == type.SPELING_DESC">
 			speling desc
 		</when>
-		<when test="type == 'SPELING_ASC'">
+		<when test="wordOrderType == type.SPELING_ASC">
 			speling asc
 		</when>
-		<when test="type == 'MEANING_DESC'">
+		<when test="wordOrderType == type.MEANING_DESC">
 			meaning desc
 		</when>
-		<when test="type == 'MEANING_DESC'">
+		<when test="wordOrderType == type.MEANING_DESC">
 			meaning asc
 		</when>
 		<otherwise>

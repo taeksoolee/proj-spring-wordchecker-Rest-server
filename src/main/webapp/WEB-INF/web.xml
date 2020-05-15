@@ -15,6 +15,17 @@
 	</listener>
 	
 	<filter>
+		<filter-name>authFilter</filter-name>
+		<filter-class>com.wordchecker.filter.AuthFilter</filter-class> 
+	</filter>
+	
+	<filter-mapping>
+		<filter-name>authFilter</filter-name>
+		<url-pattern>/auth/*</url-pattern>
+	</filter-mapping>
+	 
+	
+	<filter>
 		<filter-name>encodingFilter</filter-name>
 		<filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
 		<init-param>
@@ -24,7 +35,7 @@
 		<init-param> 
 	       <param-name>forceEncoding</param-name> 
 	       <param-value>true</param-value> 
-	    </init-param> 
+	    </init-param>
 	</filter>
 	
 	<filter-mapping>
@@ -32,21 +43,6 @@
 		<url-pattern>/*</url-pattern>
 	</filter-mapping>
 	
-	<filter>
-		<filter-name>authFilter</filter-name>
-		<filter-class>com.wordchecker.filter.AuthFilter</filter-class> 
-	</filter>
-	
-	<filter-mapping>
-		<filter-name>authFilter</filter-name>
-		<url-pattern>/auth/*</url-pattern>
-	</filter-mapping>
-	<filter-mapping>
-		<filter-name>authFilter</filter-name>
-		<url-pattern>/board/modify</url-pattern>
-	</filter-mapping>
-	
-
 	<!-- Processes application requests -->
 	<servlet>
 		<servlet-name>appServlet</servlet-name>

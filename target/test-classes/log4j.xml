@@ -10,6 +10,14 @@
 		</layout>
 	</appender>
 	
+	<appender name="file" class="org.apache.log4j.FileAppender">
+		<param name="File" value="test.log" />
+		<param name="DatePattern" value=".yyyy-MM-dd" />
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="[%d{HH:mm:ss}]%-5p: %c - %m%n" />
+		</layout>
+	</appender>
+	
 	<!-- Application Loggers -->
 	<logger name="com.wordchecker.controller">
 		<level value="info" />

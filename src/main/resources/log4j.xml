@@ -32,7 +32,7 @@
 		<level value="info" />
 	</logger>
 	
-	<!-- sql 로그 세팅 -->	
+	<!-- sql 로그 세팅 -->
 	<logger name="jdbc.sqlonly">
 		<level value="info"/>
 	</logger>
@@ -56,7 +56,6 @@
 	<logger name="jdbc.connection">
 		<level value="info"/>
 	</logger>
-	
 
 	<!-- Root Logger -->
 	<root>

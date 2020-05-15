@@ -39,7 +39,6 @@ public class MemberServiceImple implements MemberService{
 	@Override
 	@Transactional
 	public Member getLogin(Member member) throws WrongAccessException, MemberNotFoundException, UnsupportedEncodingException {
-		System.out.println(member);
 		if(!(member.getEmail() != null && member.getPassword() != null)) throw new WrongAccessException();
 		
 		Member loginMember = memberDao.selectMemberMember(Encryption.encrptMemberPassword(member));
@@ -70,7 +69,6 @@ public class MemberServiceImple implements MemberService{
 	@Transactional
 	public int addMember(Member member) throws DuplicateMemberException, InvalidException, XssException {
 		validation.validateMember(member);
-		System.out.println(member);
 		Member tempMember = new Member();
 		tempMember.setEmail(member.getEmail());
 		if(memberDao.selectMemberMember(tempMember) != null) throw new DuplicateMemberException();
